@@ -1,0 +1,25 @@
+<div>
+  <table datatable [dtOptions]="dtOptions" class="row-border hover">
+    <thead>
+<tr>
+<th>Image</th>
+<th>Nom</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+  @for (item of categories(); track item.nomcategorie) {
+<tr> 
+<td><img [src]="item.imagecategorie" alt="..." width="70" height="50"/> </td> 
+<td>{{ item.nomcategorie }}</td> 
+<td>
+  <app-modifcategorie [catId]="item._id" />
+  <button class="btn btn-danger" (click)="deleteCategory(item)">Supprimer</button>
+</td> 
+
+</tr>
+} 
+</tbody>
+</table>
+</div>
+
