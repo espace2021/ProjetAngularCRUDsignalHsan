@@ -1,27 +1,30 @@
 <div>
   @if (categories().length>0){
-  <table class="row-border hover">
-    <thead>
-<tr>
-<th>Image</th>
-<th>Nom</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody>
-  @for (item of categories(); track item.nomcategorie) {
-<tr> 
-<td><img [src]="item.imagecategorie" alt="..." width="70" height="50"/> </td> 
-<td>{{ item.nomcategorie }}</td> 
-<td>
-  <app-modifcategorie [catId]="item._id" />
-  <button class="btn btn-danger" (click)="deleteCategory(item)">Supprimer</button>
-</td> 
+    <table mat-table [dataSource]="categories()" class="mat-elevation-z8" #mytable matSort>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let  row; columns: columns;"></tr>
+      <ng-container matColumnDef="imagecategorie">
+          <th mat-header-cell *matHeaderCellDef >Image</th>
+          <td mat-cell *matCellDef="let t"><img src={{t.imagecategorie}} alt="" width="80" height="80"/></td>
+      </ng-container>
+      <ng-container matColumnDef="nomcategorie">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >Nom</th>
+        <td mat-cell *matCellDef="let t">{{ t.nomcategorie}}</td>
+      </ng-container>
+       <ng-container matColumnDef="_id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Action</th>
+          <td mat-cell *matCellDef="let t">
+            <app-modifcategorie [catId]="t._id" />
 
-</tr>
-} 
-</tbody>
-</table>
+           <button type="button" (click)=" deleteCategory(t)" class="btn btn-default">
+                  <i class="bi bi-trash-fill" style="color:red"></i>
+                </button>
+
+          </td>
+      </ng-container>
+  </table>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"  showFirstLastButtons></mat-paginator>
+ 
   }
   @else {
     <h4>Loading ...</h4>
