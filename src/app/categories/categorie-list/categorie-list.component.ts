@@ -11,6 +11,8 @@ import { ModifcategorieComponent } from "../modifcategorie/modifcategorie.compon
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
+import {categories} from '../categorie.signal'
+
 @Component({
     selector: 'app-categorie-list',
     standalone: true,
@@ -23,12 +25,14 @@ export class CategorieListComponent {
 
   public categorieService = inject(CategoriesService);
 
-   categories = signal<Categorie[]>([]);
-   
-  ngOnInit():void {
-  this.categories=this.categorieService.getCategories();
+  categories=signal<Categorie[] | []>([]);
   
+  ngOnInit(){
+    this.categorieService.getCategoriesNext()
+   this.categories=categories
+ 
   }
+
 
   deleteCategory(category:Categorie):void {
     this.categorieService.deleteCategory(category)
@@ -39,4 +43,6 @@ export class CategorieListComponent {
       // filterGlobal fonction prédéfinie de primeng on lui donne la valeur et le type de filtre ici c'est contains envoyé dans stringVal
       dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
     }
+
+  
 }

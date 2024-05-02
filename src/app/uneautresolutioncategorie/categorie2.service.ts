@@ -1,46 +1,39 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Categorie } from './categorie';
+import { Injectable, WritableSignal, inject,signal  } from '@angular/core';
+import { Categorie } from '../categories/categorie';
 import { Observable } from 'rxjs';
-import {categories} from '../categories/categorie.signal'
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoriesService {
+export class Categorie2Service {
+
   public http = inject(HttpClient);
   public url = 'http://localhost:3001/api/categories';
-  
+    categories = signal<Categorie[]>([]);
 
-getCategories(){
-     this.http.get<Categorie[]>(this.url).subscribe( data => { 
-     categories.set(data);
-   })      
-    return categories;
-   
+    getCategories():any{
+    return this.http.get<Categorie[]>(this.url).subscribe(data => { 
+     return data
+   })
+      
+      
   }
 
   public getAll():Observable<Categorie[]>{
     return this.http.get<Categorie[]>(this.url)
   }
-  
 
-getCategoriesNext(){
-     this.http.get<Categorie[]>(this.url).subscribe({ 
-       next: (data:any) => {console.log(data);categories.set(data)},
-       error: err => console.error('Observable emitted an error: ' + err),
-       complete: () => {console.log('Observable emitted the complete operation');}
-   })   
-   
-   
+  async getallcategories() {
+    return  await fetch(this.url).then(res=>res.json())
+
   }
 
- 
   deleteCategory(category: Categorie) {
     this.http.delete<Categorie>(this.url + '/' + category._id)
     .subscribe(data => {
      
-      return categories.update(categories => categories.filter(t => t._id !== category._id));
+      return this.categories.update(categories => categories.filter(t => t._id !== category._id));
     })
     
   }
@@ -50,7 +43,7 @@ getCategoriesNext(){
     createCategory(category: Categorie) {
       return this.http.post(this.url+'/' , category).subscribe(((data: any)=>{
           
-        categories.set([data,...categories()]);
+        this.categories.set([data,...this.categories()]);
      
         }))
       }
@@ -59,7 +52,7 @@ getCategoriesNext(){
         this.http.put(this.url+ '/' + category._id, category)
         .subscribe(data => {
           console.log(data);
-        return categories.update(categories => {
+        return this.categories.update(categories => {
           const index = categories.findIndex(t => t._id === category._id);
           categories[index] = category;
           return categories;
