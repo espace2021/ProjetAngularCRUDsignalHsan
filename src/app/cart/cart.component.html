@@ -1,0 +1,93 @@
+<div class="card border-secondary">
+    <div class="card-header text-secondary fw-bold">
+      <div class="row">
+        <div class="col-md-12">{{ pageTitle }}</div>
+      </div>
+    </div>
+  
+    <div class="card-body">
+      <!-- Display the cart items -->
+      @if(cartItems().length) {
+      <div class="row">
+        <table class="table-responsive table-striped table-sm">
+          <tr>
+          <th>Article</th>
+          <th class="text-center">Price</th>
+          <th class="text-center">Quantity</th>
+          <th></th>
+          </tr>
+         @for(item of cartItems(); track item){
+          <tr>
+            <td>{{ item.article.designation }}</td>
+            <td class="text-center">
+              {{ item.article.prix | number: '1.2-2' }}
+            </td>
+            <td>
+              <input type="number"  class="form-select"
+                aria-label="Quantity"
+                style="margin-bottom: 10px; width:50px; margin: 0 auto"
+                [ngModel]="item.quantity"
+                (change)="onQuantitySelected(item, $any($event.target).value)"
+              />
+               
+            </td>
+            <td>
+              <button class="btn btn-warning" (click)="removeFromCart(item)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+        </table>
+      </div>
+    }
+    @else {
+      No items in cart
+    }
+    </div>
+  
+    <!-- Display totals -->
+    @if(cartItems().length) {
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-md-3">Subtotal:</div>
+        <div class="col-md-3" style="text-align:right">
+          {{ subTotal() | number: '1.2-2' }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">Delivery:</div>
+        @if(deliveryFee()) {
+        <div class="col-md-3" style="text-align:right">
+          {{ deliveryFee() | number: '1.2-2' }}
+        </div>
+      }
+      @if(!deliveryFee()) {
+        <div
+          class="col-md-3"
+          style="text-align:right;color:red"
+        >
+          Free
+        </div>
+      }
+      </div>
+  
+      <div class="row">
+        <div class="col-md-3">Estimated Tax:</div>
+        <div class="col-md-3" style="text-align:right">
+          {{ tax() | number: '1.2-2' }}
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-3"><b>Total:</b></div>
+        <div class="col-md-3" style="text-align:right">
+          <b>{{ totalPrice() | number: '1.2-2' }}</b>
+        </div>
+      </div>
+    </div>
+    }
+    <div class="card-footer text-secondary fw-bold">
+    <a routerLink="/articlesCards">  Continue Shopping </a>
+    </div>
+  </div>
