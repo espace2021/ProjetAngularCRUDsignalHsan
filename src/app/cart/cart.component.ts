@@ -29,11 +29,24 @@ export class CartComponent {
   // Example of an effect
   x = effect(() => console.log("Cart Items:", this.cartItems()));
 
-  onQuantitySelected(item: CartItem, qty: number) {
+  onQuantitySelectedPlus(item: CartItem, qty: number) { 
+    qty++
     this.cartService.updateInCart(item, qty);
+  }
+
+  onQuantitySelectedMinus(item: CartItem, qty: number) {
+     qty--
+     if(qty>0)
+         this.cartService.updateInCart(item, qty);
+  
+       
   }
 
   removeFromCart(item: CartItem) {
     this.cartService.removeFromCart(item);
+  }
+
+  ClearCart(){
+    this.cartService.clearAllCart()
   }
 }

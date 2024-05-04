@@ -1,6 +1,6 @@
 import { Component,Input,inject, signal } from '@angular/core';
-import { Categorie } from '../categorie';
-import { CategoriesService } from '../categories.service';
+import { Categorie } from '../../classes/categorie';
+import { CategoriesService } from '../../services/categories.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 @Component({

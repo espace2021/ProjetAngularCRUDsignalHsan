@@ -66,4 +66,8 @@ export class CartService {
       )
     );
   }
+
+  clearAllCart(){
+    this.cartItems.set([])
+  }
 }

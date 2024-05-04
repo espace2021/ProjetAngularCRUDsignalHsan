@@ -1,93 +1,104 @@
-<div class="card border-secondary">
-    <div class="card-header text-secondary fw-bold">
-      <div class="row">
-        <div class="col-md-12">{{ pageTitle }}</div>
-      </div>
-    </div>
-  
-    <div class="card-body">
+<div class="cart-container">
+  <h2>{{ pageTitle }}</h2>
+  <div class="row">
+
       <!-- Display the cart items -->
       @if(cartItems().length) {
-      <div class="row">
-        <table class="table-responsive table-striped table-sm">
-          <tr>
-          <th>Article</th>
-          <th class="text-center">Price</th>
-          <th class="text-center">Quantity</th>
-          <th></th>
-          </tr>
-         @for(item of cartItems(); track item){
-          <tr>
-            <td>{{ item.article.designation }}</td>
-            <td class="text-center">
-              {{ item.article.prix | number: '1.2-2' }}
-            </td>
-            <td>
-              <input type="number"  class="form-select"
-                aria-label="Quantity"
-                style="margin-bottom: 10px; width:50px; margin: 0 auto"
-                [ngModel]="item.quantity"
-                (change)="onQuantitySelected(item, $any($event.target).value)"
-              />
-               
-            </td>
-            <td>
-              <button class="btn btn-warning" (click)="removeFromCart(item)">
-                Delete
-              </button>
-            </td>
-          </tr>
-        }
-        </table>
-      </div>
-    }
-    @else {
-      No items in cart
-    }
+      <div class="cart-items">
+
+          <div class="titles">
+          <h3 class="product-title">Product</h3>
+          <h3 class="price">Price</h3>
+          <h3 class="quantity">Quantity</h3>
+          <h3 class="price">LineTotal</h3>
+          </div>
+      
+          @for(item of cartItems(); track item){
+          <div class="cart-item">
+              <div class="cart-product">
+                  <img [src]="item.article.imageart" [alt]="item.article.designation"/>
+                  <div>
+                      <h3>{{ item.article.designation }}</h3>
+                      <p>{{item.article.reference}}</p>
+                      <button class="btn btn-warning" (click)="removeFromCart(item)">
+                        <i class="bi bi-trash-fill" style="color:red"></i>
+                      </button>
+                  </div>
+              </div> 
+              <div class="cart-product-price"> 
+                  {{ item.article.prix }} TND
+              </div>
+
+   <div class="cart-product-quantity">
+    <button  
+    (click)="onQuantitySelectedMinus(item, item.quantity)">
+    -
+    </button>
+   {{item.quantity}}
+   <button  
+    (click)="onQuantitySelectedPlus(item, item.quantity)">
+   +
+    </button>
     </div>
-  
-    <!-- Display totals -->
-    @if(cartItems().length) {
-    <div class="card-footer">
-      <div class="row">
-        <div class="col-md-3">Subtotal:</div>
-        <div class="col-md-3" style="text-align:right">
-          {{ subTotal() | number: '1.2-2' }}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">Delivery:</div>
-        @if(deliveryFee()) {
-        <div class="col-md-3" style="text-align:right">
-          {{ deliveryFee() | number: '1.2-2' }}
-        </div>
-      }
-      @if(!deliveryFee()) {
-        <div
-          class="col-md-3"
-          style="text-align:right;color:red"
-        >
-          Free
-        </div>
-      }
-      </div>
-  
-      <div class="row">
-        <div class="col-md-3">Estimated Tax:</div>
-        <div class="col-md-3" style="text-align:right">
-          {{ tax() | number: '1.2-2' }}
-        </div>
-      </div>
-  
-      <div class="row">
-        <div class="col-md-3"><b>Total:</b></div>
-        <div class="col-md-3" style="text-align:right">
-          <b>{{ totalPrice() | number: '1.2-2' }}</b>
-        </div>
-      </div>
-    </div>
-    }
-    <div class="card-footer text-secondary fw-bold">
-    <a routerLink="/articlesCards">  Continue Shopping </a>
-    </div>
+    <div class="cart-product-price"> 
+    <b>  {{item.quantity * item.article.prix!}} TND </b>
   </div>
+  </div>
+          }
+      </div>
+      }
+      @else {
+      <div class="cart-empty">
+          No items in cart
+      </div>
+      }
+  </div>
+</div>
+
+<!-- Display totals -->
+<div>
+  @if(cartItems().length) {
+  <div class="count">
+      <div class="row">
+          <div class="col-md-3">Subtotal:</div>
+          <div class="col-md-3" style="text-align:right">
+              {{ subTotal() | number: '1.3-3' }} TND
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-3">Delivery:</div>
+          @if(deliveryFee()) {
+          <div class="col-md-3" style="text-align:right">
+              {{ deliveryFee() | number: '1.3-3' }} TND
+          </div>
+          }
+          @if(!deliveryFee()) {
+          <div class="col-md-3" style="text-align:right;color:red">
+              Free
+          </div>
+          }
+      </div>
+      <div class="row">
+          <div class="col-md-3">Estimated Tax:</div>
+          <div class="col-md-3" style="text-align:right">
+              {{ tax() | number: '1.3-3' }} TND
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-3"><b>Total:</b></div>
+          <div class="col-md-3" style="text-align:right">
+              <b>{{ totalPrice() | number: '1.3-3' }} TND</b>
+          </div>
+      </div>
+  </div>
+  <div class="start-shopping">
+    <span  (click)="ClearCart()">Clear Cart</span>
+  </div>
+  }
+</div>
+<div  class="cart-summary">
+<div class="start-shopping">
+  <a routerLink="/articlesCards">Continue Shopping</a>
+</div>
+
+</div>

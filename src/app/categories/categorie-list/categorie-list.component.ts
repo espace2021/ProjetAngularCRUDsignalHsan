@@ -1,8 +1,8 @@
 import { Component,inject, signal  } from '@angular/core';
 
 
-import { CategoriesService } from '../categories.service';
-import { Categorie } from '../categorie';
+import { CategoriesService } from '../../services/categories.service';
+import { Categorie } from '../../classes/categorie';
 
 import { CommonModule } from '@angular/common';
 import { ModifcategorieComponent } from "../modifcategorie/modifcategorie.component";
@@ -11,7 +11,7 @@ import { ModifcategorieComponent } from "../modifcategorie/modifcategorie.compon
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
-import {categories} from '../categorie.signal'
+import {categories} from '../../store/store.signal'
 
 @Component({
     selector: 'app-categorie-list',
@@ -29,6 +29,7 @@ export class CategorieListComponent {
   
   ngOnInit(){
     this.categorieService.getCategoriesNext()
+    console.log(categories())
    this.categories=categories
  
   }

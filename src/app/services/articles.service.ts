@@ -2,7 +2,7 @@ import { Injectable,inject,signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Article } from '../classes/article';
 
-import {articles} from './article.signal'
+import {articles} from '../store/store.signal'
 
 @Injectable({
   providedIn: 'root'

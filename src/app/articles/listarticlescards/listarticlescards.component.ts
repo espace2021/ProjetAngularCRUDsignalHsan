@@ -4,7 +4,7 @@ import { Component,inject, signal  } from '@angular/core';
 import { ArticlesService } from '../../services/articles.service';
 import { Article } from '../../classes/article'
 
-import {articles} from '../../services/article.signal'
+import {articles} from '../../store/store.signal'
 import { CartService } from '../../services/cart.service';
 
 @Component({
