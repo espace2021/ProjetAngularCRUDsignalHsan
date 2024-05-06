@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {ViewcategoriesComponent} from './categories/viewcategories/viewcategories.component';
 import { ListarticlescardsComponent } from './articles/listarticlescards/listarticlescards.component';
 import { CartComponent } from './cart/cart.component';
+import { ListarticlesComponent } from './articles/listarticles/listarticles.component';
 
 export const routes: Routes = [
 
@@ -20,4 +21,5 @@ export const routes: Routes = [
     pathMatch: 'full',
     component: CartComponent,
   },
+  { path: 'afficharticles', pathMatch: 'full', component: ListarticlesComponent } ,
 ];

@@ -35,10 +35,10 @@ export class ArticlesService {
     
   }
   
-    createArticle(article: Article) {
+  createArticle(article: Article) {
       return this.http.post(this.url+'/' , article).subscribe(((data: any)=>{
           
-        articles.set([...articles(), article]);
+        articles.set([data,...articles()]);
         }))
       }
   
