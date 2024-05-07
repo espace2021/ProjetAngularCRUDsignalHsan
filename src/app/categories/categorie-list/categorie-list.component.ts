@@ -28,10 +28,18 @@ export class CategorieListComponent {
   categories=signal<Categorie[] | []>([]);
   
   ngOnInit(){
-    this.categorieService.getCategoriesNext()
-    console.log(categories())
-   this.categories=categories
- 
+    //*****    le cas normal *****
+ //   this.categorieService.getCategoriesNext()
+  //  console.log(categories())
+  // this.categories=categories
+
+//*****    switchmap pipe cas interval 3000 *****
+  this.categorieService.getCategoriesmap().subscribe((categories) => {
+  const res = signal(categories, {});
+  
+  return this.categories.set(res()!);
+});
+
   }
 
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Categorie } from '../classes/categorie';
-import { Observable } from 'rxjs';
+import { Observable, interval, switchMap } from 'rxjs';
 import {categories} from '../store/store.signal'
 
 @Injectable({
@@ -11,6 +11,11 @@ export class CategoriesService {
   public http = inject(HttpClient);
   public url = 'http://localhost:3001/api/categories';
   
+  getCategoriesmap(): Observable<any[]> {
+    return interval(3000).pipe(
+      switchMap(() => this.http.get<any[]>(this.url))
+    );
+  }
 
 getCategories(){
      this.http.get<Categorie[]>(this.url).subscribe( data => { 
