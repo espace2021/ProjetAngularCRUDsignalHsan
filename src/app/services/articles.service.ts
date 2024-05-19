@@ -17,7 +17,7 @@ export class ArticlesService {
 
   getArticles(){
     this.http.get<Article[]>(this.url).subscribe({ 
-      next: (data:any) => {console.log(data);articles.set(data)},
+      next: (data:any) => {articles.set(data)},
       error: err => console.error('Observable emitted an error: ' + err),
       complete: () => {console.log('Observable emitted the complete operation');}
   })  

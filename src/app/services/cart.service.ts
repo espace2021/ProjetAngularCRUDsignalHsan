@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, Injector, runInInjectionContext, signal } from '@angular/core';
 import { Article } from '../classes/article';
 import { CartItem } from '../cart/cart';
 
@@ -6,10 +6,28 @@ import { CartItem } from '../cart/cart';
   providedIn: 'root',
 })
 export class CartService {
-  // State exposed by the service
-  cartItems = signal<CartItem[]>([]);
 
-  // Total up the extended price for each item
+    injector = inject(Injector);
+
+ // State exposed by the service
+ cartItems = signal<CartItem[]>([]);
+
+  constructor(){
+      let data = localStorage.getItem('myCart');
+      this.cartItems.set(data ? JSON.parse(data) : [])
+    }
+  
+//update localStorage
+updateLocalStorage() {
+    runInInjectionContext(this.injector, () => {
+    effect(() =>{
+      localStorage.setItem('myCart', JSON.stringify(this.cartItems()))
+      console.log(localStorage.getItem('myCart'))
+       })
+    });
+}
+
+   // Total up the extended price for each item
   subTotal = computed(() =>
     this.cartItems().reduce(
       (a, b) => a + b.quantity * Number(b.article.prix),
@@ -35,18 +53,21 @@ export class CartService {
 
   // Add the article to the cart
   addToCart(article: Article): void {
-    // Check if the article is already in the cart
+
+      // Check if the article is already in the cart
     const cartItem = this.cartItems().find(
       (v) => v.article._id === article._id
     );
     if (cartItem) {
       // Update the quantity
       this.updateInCart(cartItem, cartItem.quantity + 1);
-    } else {
+     } else {
       // Add the article to the cart
       // Use update and not mutate because it's replacing the array, not modifying an element
       this.cartItems.update((items) => [...items, { article, quantity: 1 }]);
     }
+  this.updateLocalStorage()
+  
   }
 
   // Remove the item from the cart
@@ -55,6 +76,7 @@ export class CartService {
     this.cartItems.update((items) =>
       items.filter((i) => i.article._id !== cartItem.article._id)
     );
+    this.updateLocalStorage()
   }
 
   updateInCart(cartItem: CartItem, quantity: number) {
@@ -65,9 +87,11 @@ export class CartService {
           : item
       )
     );
+    this.updateLocalStorage()
   }
 
   clearAllCart(){
     this.cartItems.set([])
+    localStorage.setItem('myCart','')
   }
 }
